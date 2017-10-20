@@ -1,0 +1,45 @@
+﻿@model IEnumerable<FileUpload.Models.tbl_registration>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div>
+
+        <h2>Excel Import</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            <div>
+                <input name="file" type="file" required />
+                <button type="submit">Import</button>
+            </div>
+        </form>
+
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>City</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                    <td>@Html.DisplayFor(modelItem => item.City)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+</html>
