@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="dbFilesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="dbFilesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tbl_registration">
           <Key>
             <PropertyRef Name="Sr_no" />
@@ -16,12 +16,12 @@
           <Property Name="Address" Type="nvarchar(max)" />
           <Property Name="City" Type="nvarchar(max)" />
           <Property Name="Age" Type="int" />
+          <Property Name="Status" Type="nchar" MaxLength="25" />
         </EntityType>
         <EntityContainer Name="dbFilesModelStoreContainer">
           <EntitySet Name="tbl_registration" EntityType="Self.tbl_registration" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="dbFilesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -36,6 +36,7 @@
           <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="City" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Age" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="25" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityContainer Name="dbFilesEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tbl_registration" EntityType="Self.tbl_registration" />
@@ -49,6 +50,7 @@
           <EntitySetMapping Name="tbl_registration">
             <EntityTypeMapping TypeName="dbFilesModel.tbl_registration">
               <MappingFragment StoreEntitySet="tbl_registration">
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Sr_no" ColumnName="Sr_no" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
