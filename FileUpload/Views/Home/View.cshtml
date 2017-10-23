@@ -1,44 +1,124 @@
 ﻿@model IEnumerable<FileUpload.Models.tbl_registration>
 
-@{
-    Layout = null;
-}
 
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div>
+    <div style="margin:0 100px">
         <h2>Excel Import</h2>
 
         <form method="post" enctype="multipart/form-data">
-            <div>
+            <div class="col-lg-3">
                 <input name="file" type="file" required />
+            </div>
+            <div class="col-lg-9">
                 <button type="submit">Import</button>
             </div>
         </form>
-        <hr />
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th style="padding:5px 10px;border-bottom:1px solid;text-align:center;background-color:deepskyblue;">Email</th>
-                <th style="padding:5px 10px;border-bottom:1px solid;text-align:center;background-color:deepskyblue;">Name</th>
-                <th style="padding:5px 10px;border-bottom:1px solid;text-align:center;background-color:deepskyblue;">Address</th>
-                <th style="padding:5px 10px;border-bottom:1px solid;text-align:center;background-color:deepskyblue;">City</th>
+        <hr /><hr />
+        <table class="table table-striped">
+            <tr style="width:10px">
+                <th class="active">
+                    <input type="checkbox" class="select-all checkbox" name="select-all" />
+                </th>
+                <th class="active">Email</th>
+                <th class="active">Name</th>
+                <th class="active">Address</th>
+                <th class="active">City</th>
             </tr>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td style="padding:5px 10px;border-bottom:1px solid;text-align:left;">@Html.DisplayFor(modelItem => item.Email)</td>
-                    <td style="padding:5px 10px;border-bottom:1px solid;text-align:left;">@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td style="padding:5px 10px;border-bottom:1px solid;text-align:left;">@Html.DisplayFor(modelItem => item.Address)</td>
-                    <td style="padding:5px 10px;border-bottom:1px solid;text-align:left;">@Html.DisplayFor(modelItem => item.City)</td>
+                    <td class="active">
+                        <input type="checkbox" class="select-item checkbox" name="select-item" value="1000" />
+                    </td>
+                    <td class="success">@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td class="warning">@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td class="danger">@Html.DisplayFor(modelItem => item.Address)</td>
+                    <td class="info">@Html.DisplayFor(modelItem => item.City)</td>
                 </tr>
             }
         </table>
+        <hr />
+        <div>
+            <button id="select-all" class="btn button-default">SelectAll</button>
+            <button id="select-invert" class="btn button-default">Invert</button>
+            <button id="selected" class="btn btn-danger">Confirm</button>
+        </div>
+
+        <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+        <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script>
+            $(function () {
+
+                //button select all or cancel
+                $("#select-all").click(function () {
+                    var all = $("input.select-all")[0];
+                    all.checked = !all.checked
+                    var checked = all.checked;
+                    $("input.select-item").each(function (index, item) {
+                        item.checked = checked;
+                    });
+                });
+
+                //button select invert
+                $("#select-invert").click(function () {
+                    $("input.select-item").each(function (index, item) {
+                        item.checked = !item.checked;
+                    });
+                    checkSelected();
+                });
+
+                //button get selected info
+                $("#selected").click(function () {
+                    var items = [];
+                    $("input.select-item:checked:checked").each(function (index, item) {
+                        items[index] = item.value;
+                    });
+                    if (items.length < 1) {
+                        alert("no selected items!!!");
+                    } else {
+                        var values = items.join(',');
+                        console.log(values);
+                        var html = $("<div></div>");
+                        html.html("selected:" + values);
+                        html.appendTo("body");
+                    }
+                });
+
+                //column checkbox select all or cancel
+                $("input.select-all").click(function () {
+                    var checked = this.checked;
+                    $("input.select-item").each(function (index, item) {
+                        item.checked = checked;
+                    });
+                });
+
+                //check selected items
+                $("input.select-item").click(function () {
+                    var checked = this.checked;
+                    console.log(checked);
+                    checkSelected();
+                });
+
+                //check is all selected
+                function checkSelected() {
+                    var all = $("input.select-all")[0];
+                    var total = $("input.select-item").length;
+                    var len = $("input.select-item:checked:checked").length;
+                    console.log("total:" + total);
+                    console.log("len:" + len);
+                    all.checked = len === total;
+                }
+            });
+        </script>
     </div>
 </body>
+
 </html>
