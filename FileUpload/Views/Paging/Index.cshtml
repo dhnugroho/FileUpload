@@ -1,0 +1,168 @@
+﻿@model List<FileUpload.Models.tbl_registration>
+
+@{
+    Layout = null;
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h2>Actual Cost Verivication</h2>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a href="#" class="navbar-brand">Search</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    @using (Html.BeginForm("index", "paging", FormMethod.Get, new { @class = "navbar-form navbar-left" }))
+                    {
+                        <div class="form-group">
+                            <input type="text" name="search" value="@ViewBag.search" class="form-control" placeholder="search" />
+                        </div>
+                        <button type="submit" value="Search" class="btn btn-success">Search</button>
+                    }
+                </div>
+            </div>
+        </nav>
+        <div>
+            <table class="table table-striped">
+                <tr style="width:10px">
+                    <th class="active">
+                        <input type="checkbox" class="select-all checkbox" name="select-all" />
+                    </th>
+                    <th class="info">Email</th>
+                    <th class="info">Name</th>
+                    <th class="info">Address</th>
+                    <th class="info">City</th>
+                    <th class="info">Status</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="active">
+                            <input type="checkbox" class="select-item checkbox" name="select-item" value="1000" />
+                        </td>
+                        <td class="active">@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td class="active">@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td class="active">@Html.DisplayFor(modelItem => item.Address)</td>
+                        <td class="active">@Html.DisplayFor(modelItem => item.City)</td>
+                        <td class="active">@Html.DisplayFor(modelItem => item.Status)</td>
+                    </tr>
+                }
+            </table>
+
+            <div class="row">
+                <div style="margin: 20px 0" class="col-sm-8">
+                    <button id="select-all" class="btn button-default">SelectAll</button>
+                    <button id="select-invert" class="btn button-default">Invert</button>
+                    <button id="selected" class="btn btn-danger">Confirm</button>
+                    <a class="btn btn-info" href="/Home/View">UPLOAD</a>
+                </div>
+                <div class="col-sm-4">
+                    @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-right")
+                </div>
+            </div>
+
+            @Html.Hidden("dir", grid.SortDirection)
+            @Html.Hidden("col", grid.SortColumn)
+
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-3.2.1.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+            $(function () {
+                try {
+                    var dir = $('#dir').val();
+                    var col = $('#col').val();
+                    var header = $("th a[href*=" + col + "]");
+                    if (dir == "Ascending") {
+                        header.text(header.text() + "  ▲")
+                    }
+                    if (dir == "Descending") {
+                        header.text(header.text() + "  ▼");
+                    }
+
+                } catch (e) {
+
+                }
+            })
+
+            $(function () {
+
+                //button select all or cancel
+                $("#select-all").click(function () {
+                    var all = $("input.select-all")[0];
+                    all.checked = !all.checked
+                    var checked = all.checked;
+                    $("input.select-item").each(function (index, item) {
+                        item.checked = checked;
+                    });
+                });
+
+                //button select invert
+                $("#select-invert").click(function () {
+                    $("input.select-item").each(function (index, item) {
+                        item.checked = !item.checked;
+                    });
+                    checkSelected();
+                });
+
+                //button get selected info
+                $("#selected").click(function () {
+                    var items = [];
+                    $("input.select-item:checked:checked").each(function (index, item) {
+                        items[index] = item.value;
+                    });
+                    if (items.length < 1) {
+                        alert("no selected items!!!");
+                    } else {
+                        //UPDATE actualCOst
+                        //SET status = 'Confirm/1'
+                        //WHERE ActualID = {(id)};
+                        var values = items.join(',');
+                        console.log(values);
+                        var html = $("<div></div>");
+                        html.html("selected:" + values);
+                        html.appendTo("body");
+                    }
+                });
+
+                //column checkbox select all or cancel
+                $("input.select-all").click(function () {
+                    var checked = this.checked;
+                    $("input.select-item").each(function (index, item) {
+                        item.checked = checked;
+                    });
+                });
+
+                //check selected items
+                $("input.select-item").click(function () {
+                    var checked = this.checked;
+                    console.log(checked);
+                    checkSelected();
+                });
+
+                //check is all selected
+                function checkSelected() {
+                    var all = $("input.select-all")[0];
+                    var total = $("input.select-item").length;
+                    var len = $("input.select-item:checked:checked").length;
+                    console.log("total:" + total);
+                    console.log("len:" + len);
+                    all.checked = len === total;
+                }
+            });
+    </script>
+
+</body>
+</html>

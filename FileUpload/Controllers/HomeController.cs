@@ -30,6 +30,7 @@ namespace FileUpload.Controllers
                         select tbl_registration);
         }
 
+
         [HttpPost]
         public ActionResult View(HttpPostedFileBase file)
         {
