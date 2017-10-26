@@ -157,6 +157,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PagingController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -252,6 +253,12 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\View.cshtml" />
     <Content Include="Views\Paging\Index.cshtml" />
+    <Content Include="Views\Upload\Create.cshtml" />
+    <Content Include="Views\Upload\Delete.cshtml" />
+    <Content Include="Views\Upload\Details.cshtml" />
+    <Content Include="Views\Upload\Edit.cshtml" />
+    <Content Include="Views\Upload\Index.cshtml" />
+    <Content Include="Views\Upload\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

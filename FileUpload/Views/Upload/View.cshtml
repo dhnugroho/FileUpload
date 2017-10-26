@@ -1,0 +1,88 @@
+﻿@model IEnumerable<FileUpload.Models.tbl_registration>
+
+@{
+    ViewBag.Title = "Index";
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+<h2>Excel Import</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="col-lg-3">
+        <input name="file" type="file" required />
+    </div>
+    <div class="col-lg-9">
+        <button type="submit">Import</button>
+    </div>
+</form>
+<hr />
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Age)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Age)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Sr_no }, new { @class = "btn btn-xs btn-danger" }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Sr_no }, new { @class = "btn btn-xs btn-info" }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Sr_no })
+        </td>
+    </tr>
+}
+
+</table>
+<div class="row">
+    <div style="margin: 20px 0" class="col-sm-7">
+    </div>
+    <div class="col-sm-5">
+        @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-right")
+    </div>
+</div>
