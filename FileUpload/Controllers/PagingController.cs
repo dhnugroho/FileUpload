@@ -36,9 +36,7 @@ namespace FileUpload.Controllers
                 var v = (from a in dc.tbl_registration
                          where
                                  a.Email.Contains(search) ||
-                                 a.Password.Contains(search) ||
                                  a.Name.Contains(search) ||
-                                 a.Address.Contains(search) ||
                                  a.City.Contains(search)
                          select a
                                 );

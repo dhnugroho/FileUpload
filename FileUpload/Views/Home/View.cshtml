@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<FileUpload.Models.tbl_registration>
 
+@{
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,29 +27,38 @@
         <hr /><hr />
         <table class="table table-striped">
             <tr style="width:10px">
-                <th class="active">Email</th>
-                <th class="active">Name</th>
-                <th class="active">Address</th>
-                <th class="active">City</th>
+                <th class="info">Email</th>
+                <th class="info">Name</th>
+                <th class="info">Address</th>
+                <th class="info">City</th>
+                <th class="info">Operation</th>
             </tr>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td class="success">@Html.DisplayFor(modelItem => item.Email)</td>
-                    <td class="warning">@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td class="danger">@Html.DisplayFor(modelItem => item.Address)</td>
-                    <td class="info">@Html.DisplayFor(modelItem => item.City)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                    <td>@Html.DisplayFor(modelItem => item.City)</td>'
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Sr_no }, new { @class = "btn btn-xs btn-danger" })
+                        @Html.ActionLink("Detail", "Detail", new { id = item.Sr_no }, new { @class = "btn btn-xs btn-info" })
+                    </td>
                 </tr>
             }
         </table>
         <hr />
-        <div>
-            <button id="select-all" class="btn button-default">SelectAll</button>
-            <button id="select-invert" class="btn button-default">Invert</button>
-            <button id="selected" class="btn btn-danger">Confirm</button>
-            <a href="/Paging/" class="btn btn-info">LIST</a>
+        <div class="row">
+            <div style="margin: 20px 0" class="col-sm-7">
+                <button id="select-all" class="btn button-default">SelectAll</button>
+                <button id="select-invert" class="btn button-default">Invert</button>
+                <button id="selected" class="btn btn-danger">Confirm</button>
+                <a class="btn btn-info" href="/Paging/">List</a>
+            </div>
+            <div class="col-sm-5">
+                @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-right")
+            </div>
         </div>
-
         <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
         <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script>

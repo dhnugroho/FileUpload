@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Data.OleDb;
 using System.IO;
 using FileUpload.Models;
+using System.Linq.Dynamic;
 
 namespace FileUpload.Controllers
 {
@@ -23,13 +24,38 @@ namespace FileUpload.Controllers
             return View();
         }
 
-        public ActionResult View()
+        public ActionResult View(int page = 1, string sort = "Name", string sortdir = "asc", string search = "")
         {
-            dbFilesEntities entities = new dbFilesEntities();
-            return View(from tbl_registration in entities.tbl_registration.Take(10)
-                        select tbl_registration);
+            int pageSize = 10;
+            int totalRecord = 0;
+            if (page < 1) page = 1;
+            int skip = (page * pageSize) - pageSize;
+            var data = GetData(search, sort, sortdir, skip, pageSize, out totalRecord);
+            ViewBag.TotalRows = totalRecord;
+            ViewBag.search = search;
+            return View(data);
         }
 
+        public List<tbl_registration> GetData(string search, string sort, string sortdir, int skip, int pageSize, out int totalRecord)
+        {
+            using (dbFilesEntities dc = new dbFilesEntities())
+            {
+                var v = (from a in dc.tbl_registration
+                         where
+                                 a.Email.Contains(search) ||
+                                 a.Name.Contains(search) ||
+                                 a.City.Contains(search)
+                         select a
+                                );
+                totalRecord = v.Count();
+                v = v.OrderBy(sort + " " + sortdir);
+                if (pageSize > 0)
+                {
+                    v = v.Skip(skip).Take(pageSize);
+                }
+                return v.ToList();
+            }
+        }
 
         [HttpPost]
         public ActionResult View(HttpPostedFileBase file)
